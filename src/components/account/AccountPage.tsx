@@ -3,6 +3,9 @@ import type{ UserProfile as UserProfileType, UserActivity} from '@/types/user'
 import type {Restaurant} from '@/types/restaurant'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserProfile } from './UserProfile';
+import FavoritesList from "./FavoritesList"
+import WantToTryList from './WantToTryList';
+import VisitHistory from './VisitHistory';
 
 interface AccountPageProps{
     user: UserProfileType;
@@ -30,7 +33,7 @@ const AccountPage = ({
 
     const favoriteRestaurants = activity.favorites.map(id=>restaurantMap.get(id)).filter((r): r is Restaurant =>r!==undefined)
 
-    const wantToTry = activity.wantToTry.map(id=>restaurantMap.get(id)).filter((r): r is Restaurant =>r!==undefined)
+    const wantToTryRestaurants = activity.wantToTry.map(id=>restaurantMap.get(id)).filter((r): r is Restaurant =>r!==undefined)
 
     return (
         <div className='min-h-screen bg'>
@@ -48,9 +51,9 @@ const AccountPage = ({
                    </TabsTrigger>
                    <TabsTrigger value='wantToTry'>
                     Want to try
-                    {wantToTry.length>0&&(
+                    {wantToTryRestaurants.length>0&&(
                         <span className='ml-1 text-xs bg-primary text-primary-foreground rounded-full px-2'>
-                            {wantToTry.length}
+                            {wantToTryRestaurants.length}
                         </span>
                     )}
                    </TabsTrigger>
@@ -73,15 +76,30 @@ const AccountPage = ({
                    </TabsContent>
 
                     <TabsContent value='favorites' className='space-y-4'>
-                        
+                        <FavoritesList
+                        restaurants={favoriteRestaurants}
+                        onRemove={onRemoveFavorite}
+                        onSelect={onSelectRestaurant}
+                        >
+                        </FavoritesList>
                     </TabsContent>
                
                     <TabsContent value='wantToTry' className='space-y-4'>
-
+                    <WantToTryList 
+                    restaurants={wantToTryRestaurants}
+                    onRemove={onRemoveWantToTry}
+                    onSelect={onSelectRestaurant}
+                    ></WantToTryList>
                     </TabsContent>
 
                     <TabsContent value='history' className='space-y-4'>
+                    <VisitHistory
+                    visits={activity.visitHistory}
+                    restaurants={restaurantMap}
+                    onSelectRestaurant={onSelectRestaurant}
+                    >
 
+                    </VisitHistory>
                     </TabsContent>
           </Tabs>
         </div>
