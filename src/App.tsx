@@ -4,6 +4,7 @@ import './App.css'
 import { mockUser, mockUserActivity } from './components/data/mockUser'
 import { mockRestaurants } from './components/data/mockRestaurant'
 import type { Restaurant } from './types/restaurant'
+import DiscoveryPage from './components/Discover/DiscoveryPage'
 
 function App() {
   const [favorites, setFavorites] = useState<Set<string>>(new Set(mockUserActivity.favorites))
@@ -16,7 +17,8 @@ function App() {
 
   return (
     <>
-          <AccountPage
+    <DiscoveryPage></DiscoveryPage>
+          {/* <AccountPage
             user={mockUser}
             activity={{
               ...mockUserActivity,
@@ -39,7 +41,7 @@ function App() {
                 return next;
               });
             }}
-          />
+          /> */}
        
     </>
   )
